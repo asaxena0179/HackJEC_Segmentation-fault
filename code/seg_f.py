@@ -3,6 +3,7 @@ from cProfile import label
 from multiprocessing.sharedctypes import Value
 from tkinter import *
 from tkinter import messagebox
+from tkinter.font import names
 from tkinter.ttk import Labelframe
 from PIL import Image, ImageTk
 from tkinter import filedialog as fd
@@ -18,9 +19,10 @@ from assign import controls
 from sqlite3 import converters
 from zlib import Z_PARTIAL_FLUSH
 import numpy as np
-#import face_recognition as fr
+import face_recognition as fr
 import os
 import test_img
+from Virtual_Mouse import mes
 
 
 root = Tk()
@@ -46,17 +48,29 @@ def vclick():
     
     top = Toplevel()
     button3 = Button(top, text='go for hand gestures',bd=5, command=handREC, padx=10)
+
     button3.grid(row=7, sticky=W, pady=5)
 
        # comment out kr dena neeche ki 2 line
     button4 = Button(top, text="go for face recognition(beta)", bd=5, command=frec, padx=10)
     button4.grid(row=9, sticky=W, pady=5)
 
+    button7 = Button(top, text="enable mouse control", bd=5, command=mes, padx=10)
+
+    button7.grid(row=11, sticky=W, pady=5)
+
+
     top.mainloop()
 
 
 e1 = Entry(root, textvariable=var1)
 e2 = Entry(root, show="*", textvariable=var2)
+
+
+
+
+
+
 
 
 def clear():
@@ -71,22 +85,46 @@ button2 = Button(root, text='clear', bd=5, command=clear)
 button2.grid(row=3, column=1, pady=5)
 
 
+
+
 def frec():
 
+    # print(os.listdir("code/"))
+    # Images = []
+    # path = "test_img"
+    # names = []
+    # myList = os.listdir(path)
+    # print(myList)
+    # for i in myList:
+    #     print(f'hiiiiii
+    # 
+    # 
+    # iiii{path}h/{i}')
+    #     img = cv2.imread(f'{path}h/{i}')
+    #     Images.append(img)
+    #     print(Images)
+    #     names.append(os.path.splitext(i)[0])
+    # print(names)
+
     Images = []
-    path = "test"
-    names = []
-    myList = os.listdir(path)
-    print(myList)
-    for i in myList:
-        img = cv2.imread(f'{path}/{i}')
-        Images.append(img)
-        names.append(os.path.splitext(i)[0])
-    print(names)
+    names=[]
+    # Go through all the files and subdirectories inside a folder and save path to images inside list
+    for root, dirs, files in os.walk("test_img", topdown=False): 
+    #   print(root,"hii", dirs,"he", files)
+        for name in files:
+            path = os.path.join(root, name)
+
+            if path.endswith("jpg"): # We want only the images
+                Images.append(path)
+                names.append(name)
+
+        print(len(Images),Images,names) # If > 0, then a PNG image was loaded
 
     def findEncoding(Images):
         encodelist = []
         for item in Images:
+            print(item)
+            item=cv2.imread(item)
             img = cv2.cvtColor(item, cv2.COLOR_BGR2RGB)
             encoding = fr.face_encodings(item)[0]
             encodelist.append(encoding)
@@ -122,11 +160,7 @@ print(e1, e2)
 
 
 def handREC():
-    # hand detection files
-    # TechVidvan hand Gesture Recognizer
 
-    # import necessary packages
-    # initialize mediapipe
     mpHands = mp.solutions.hands
     hands = mpHands.Hands(max_num_hands=1, min_detection_confidence=0.7)
     mpDraw = mp.solutions.drawing_utils
@@ -186,9 +220,9 @@ def handREC():
                 #     result=np.where(y==np.amax(y))
                 #     print(x,"hiii",result[0]+1)
 
-        # show the prediction on the frame
-        cv2.putText(frame, className, (10, 50), cv2.FONT_HERSHEY_SIMPLEX,
-                    1, (0, 0, 255), 2, cv2.LINE_AA)
+        # # show the prediction on the frame
+        # cv2.putText(frame, className, (10, 50), cv2.FONT_HERSHEY_SIMPLEX,
+        #             1, (0, 0, 255), 2, cv2.LINE_AA)
 
         # Show the final output
         cv2.imshow("Output", frame)
@@ -196,6 +230,7 @@ def handREC():
         if cv2.waitKey(1) == ord('q'):
             break
 # release the webcam and destroy all active windows
+
     cap.release()
     cv2.destroyAllWindows()
 

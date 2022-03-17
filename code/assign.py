@@ -15,20 +15,17 @@ def controls(id):
     if detection:
         if id==0:
             pyautogui.hotkey('ctrl','s')
-            time.sleep(2)
+            time.sleep(0.2)
         elif id==1:
             pyautogui.hotkey('win','prtsc')
-            time.sleep(2)
+            time.sleep(0.2)
         elif id==2:
             pyautogui.hotkey('up')
         elif id==3:
             pyautogui.hotkey('down')
         elif id==5:
             pyautogui.hotkey('esc')
-            time.sleep(1)
+            time.sleep(0.2)
         elif id==8:
             pyautogui.hotkey('enter')
-            time.sleep(0.5)
-        else:
-            pass
-
+            time.sleep(0.2)

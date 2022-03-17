@@ -63,7 +63,7 @@ while running:
             prediction = model.predict([landmarks])
             classID = np.argmax(prediction)
             className = classNames[classID]
-            print("hiiii",prediction[0],classID)
+            # print("hiiii",prediction[0],classID)
             controls(classID)
             # sleep(1)
             # for x in range(0,8):
@@ -72,8 +72,8 @@ while running:
             #     print(x,"hiii",result[0]+1)
 
     # show the prediction on the frame
-    cv2.putText(frame, className, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 
-                   1, (0,0,255), 2, cv2.LINE_AA)
+    # cv2.putText(frame, className, (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 
+    #                1, (0,0,255), 2, cv2.LINE_AA)
 
     # Show the final output
     cv2.imshow("Output", frame) 
